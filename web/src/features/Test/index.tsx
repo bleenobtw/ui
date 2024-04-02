@@ -11,8 +11,13 @@ export default function Test() {
       setCurrentText(data.text);
   }
 
+  function handleEscape() {
+    console.log("Escape Called, Closing Feature: test");
+    setIsShown(false)
+  }
+
   return (
-      <Feature id="test" onShow={setIsShown} onEvent={handleEvent}>
+      <Feature id="test" onShow={setIsShown} onEvent={handleEvent} onEscape={handleEscape}>
         {isShown ? (
             <pre>{currentText}</pre>
         ) : null}

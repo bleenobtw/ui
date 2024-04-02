@@ -5,10 +5,10 @@ interface FeatureProps<T = any> extends PropsWithChildren {
   id: string;
   onShow: (data: T) => void;
   onEvent?: (data: T) => void;
+  onEscape?: () => void;
 }
 
 const Feature: FC<FeatureProps> = (props) => {
-
   async function handleMessageEvent(e: MessageEvent) {
     if (!e.data || e.data.feature !== props.id)
       return;
@@ -22,11 +22,21 @@ const Feature: FC<FeatureProps> = (props) => {
     }
   }
 
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key != "Escape")
+      return;
+
+    if (typeof props.onEscape === "function")
+      props.onEscape();
+  }
+
   useEffect(() => {
     window.addEventListener("message", handleMessageEvent);
+    window.addEventListener("keydown", handleKeydown);
 
     return () => {
       window.removeEventListener("message", handleMessageEvent);
+      window.removeEventListener("keydown", handleKeydown);
     }
   }, [])
 
